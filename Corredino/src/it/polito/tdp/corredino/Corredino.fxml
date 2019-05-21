@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: yellow;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polito.tdp.corredino.CorredinoController">
+   <top>
+      <Label contentDisplay="CENTER" prefHeight="29.0" prefWidth="156.0" text="FIND THE PERFECT LAYETTE" textAlignment="CENTER" BorderPane.alignment="CENTER" />
+   </top>
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefHeight="47.0" prefWidth="400.0">
+               <children>
+                  <Label graphicTextGap="20.0" text="Budget?">
+                     <HBox.margin>
+                        <Insets left="80.0" top="5.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtBdg" promptText="100000€">
+                     <HBox.margin>
+                        <Insets left="30.0" top="5.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox prefHeight="46.0" prefWidth="400.0">
+               <children>
+                  <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="220.0" style="-fx-background-color: 66ff00;" text="Client side">
+                     <HBox.margin>
+                        <Insets left="40.0" top="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="220.0" text="Seller side">
+                     <HBox.margin>
+                        <Insets left="20.0" right="40.0" top="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+            <HBox prefHeight="50.0" prefWidth="400.0">
+               <children>
+                  <Button fx:id="buttonMin" mnemonicParsing="false" onAction="#CalcolaMin" text="Min expense">
+                     <HBox.margin>
+                        <Insets left="43.0" top="15.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="btnMaxC" mnemonicParsing="false" onAction="#CalcolaMaxC" text="Max completeness">
+                     <HBox.margin>
+                        <Insets left="25.0" top="15.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="btnTutti" mnemonicParsing="false" onAction="#MostraTutti" text="Show all">
+                     <HBox.margin>
+                        <Insets left="25.0" top="15.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+            <HBox prefHeight="51.0" prefWidth="400.0">
+               <children>
+                  <Button fx:id="btnMaxIncome" mnemonicParsing="false" onAction="#CalcolaMaxIncome" text="Max income">
+                     <HBox.margin>
+                        <Insets left="43.0" top="7.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="btnMaxItem" mnemonicParsing="false" onAction="#calcolaMaxItem" text="Max item sold">
+                     <HBox.margin>
+                        <Insets left="38.0" top="7.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="btnTuttiv2" mnemonicParsing="false" onAction="#MostraTuttiv2" text="Show all">
+                     <HBox.margin>
+                        <Insets left="40.0" top="7.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+            <TextArea fx:id="txtResult" onDragDetected="#Result" prefHeight="200.0" prefWidth="400.0">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="20.0" right="20.0" top="10.0" />
+               </VBox.margin>
+            </TextArea>
+         </children>
+      </VBox>
+   </center>
+   <bottom>
+      <Button fx:id="btnReset" mnemonicParsing="false" onAction="#Reset" text="Reset" BorderPane.alignment="CENTER_RIGHT">
+         <BorderPane.margin>
+            <Insets bottom="10.0" right="20.0" />
+         </BorderPane.margin>
+      </Button>
+   </bottom>
+</BorderPane>
