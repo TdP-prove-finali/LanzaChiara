@@ -5,7 +5,7 @@ public class TestModel {
 	public static void main(String[] args) {
 	 Model model = new Model();
 //	 System.out.println(model.tutine());
-	 System.out.println(model.calcola(300));
+	 System.out.println(model.calcola(300, "Autunno/Primavera"));
 	}
 
 }

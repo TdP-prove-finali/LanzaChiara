@@ -14,14 +14,15 @@ public class ListinoDAO {
 	
 	List<Product> result = new ArrayList<>();
 	
-	public List<Product> getAllProduct() {
+	public List<Product> getAllProduct(String season) {
 		
-		String sql = "SELECT idnum,NAME,category,price,season,sellerprice  FROM listino";
+		String sql = "SELECT idnum,NAME,category,price,season,sellerprice  FROM listino WHERE season=? or season =''";
 		
 		
 		try {
 			Connection conn = ConnectDB.getConnection();
 			PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1, season);
 			ResultSet res = st.executeQuery();
 
 			while (res.next()) {
@@ -39,7 +40,7 @@ public class ListinoDAO {
 
 	}
 
-	public List<Product> getAll(String string) {
+/*	public List<Product> getAll(String string) {
 		if(result.isEmpty())
 			this.getAllProduct();
 		List<Product> cat = new ArrayList<>();
@@ -52,7 +53,7 @@ public class ListinoDAO {
 	}
 		return cat;
 	
-	}
+	}*/
 	
 	public List<String> getAllCat(){
 	String sql = "SELECT DISTINCT(category) FROM listino ";

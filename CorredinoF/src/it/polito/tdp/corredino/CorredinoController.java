@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.control.ComboBox;
 
 public class CorredinoController {
 	
@@ -30,6 +31,9 @@ public class CorredinoController {
 
     @FXML // fx:id="buttonMin"
     private Button buttonMin; // Value injected by FXMLLoader
+    
+    @FXML // fx:id="season"
+    private ComboBox<String> season; // Value injected by FXMLLoader
 
     @FXML // fx:id="btnMaxC"
     private Button btnMaxC; // Value injected by FXMLLoader
@@ -70,11 +74,14 @@ public class CorredinoController {
     @FXML
     void MostraTutti(ActionEvent event) {
     	if(txtBdg.getText().isEmpty())
-    		txtResult.appendText("Inserisci un budget");
+    		txtResult.appendText("Inserisci un budget\n");
+    	if(season.getValue()==null)
+    		txtResult.appendText("Inserisci la stagione in cui nascerà il bambino\n");
     	if(Integer.parseInt(txtBdg.getText())<100)
-    		txtResult.appendText("Inserisci un budget reale (Minimo 100 euro)");
-    	model.calcola(Integer.parseInt(txtBdg.getText()));
-    	txtResult.appendText(model.getBest());
+    		txtResult.appendText("Inserisci un budget reale (Minimo 100 euro)\n");
+    	if(!txtBdg.getText().isEmpty() && season.getValue()!=null) {
+    	model.calcola(Integer.parseInt(txtBdg.getText()), season.getValue());
+    	txtResult.appendText(model.getBest());}
 
     }
 
@@ -109,11 +116,21 @@ public class CorredinoController {
         assert btnTuttiv2 != null : "fx:id=\"btnTuttiv2\" was not injected: check your FXML file 'Corredino.fxml'.";
         assert txtResult != null : "fx:id=\"txtResult\" was not injected: check your FXML file 'Corredino.fxml'.";
         assert btnReset != null : "fx:id=\"btnReset\" was not injected: check your FXML file 'Corredino.fxml'.";
+        assert season != null : "fx:id=\"season\" was not injected: check your FXML file 'Corredino.fxml'.";
 
     }
 
 	public void setModel(Model model) {
 		this.model=model;
+		season.getItems().addAll("Inverno", "Autunno/Primavera", "Estate");
+		buttonMin.setDisable(true);
+		btnMaxC.setDisable(true);
+		btnTutti.setDisable(true);
+		btnMaxIncome.setDisable(true);
+		btnMaxItem.setDisable(true);
+		btnTuttiv2.setDisable(true);
+		
+		
 		
 	}
 }

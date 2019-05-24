@@ -11,6 +11,7 @@ import it.polito.tdp.corredino.db.ListinoDAO;
 public class Model {
 	
 	ListinoDAO dao;
+
 	
 	List<Product> allP =new ArrayList<>();
 	List<List<Product>> allRes = new ArrayList<>();
@@ -21,6 +22,8 @@ public class Model {
 	Map<String,Integer> controllore = new HashMap<>();
 	Map<String, List<Product>> categories = new HashMap<String,List<Product>>();
 	float tot =0;
+	List<Product> rimanenti; //new ArrayList<>();
+	List<Product> scartati = new ArrayList<>();
 
 	
 	public Model() {
@@ -34,11 +37,13 @@ public class Model {
 //		
 //	}
 	
-	public List<Product> calcola(float budget) {
-		allP=dao.getAllProduct();
+	public List<Product> calcola(float budget, String season) {
+		if (season.equals("Autunno/Primavera"))
+				season = "Privavera";
+		allP=dao.getAllProduct(season);
 		cat= dao.getAllCat();
 		for (String s:cat) {
-			categories.put(s, dao.getAll(s));
+		//	categories.put(s, dao.getAll(s));
 			controllore.put(s, 0);
 		}
 		
@@ -50,20 +55,25 @@ public class Model {
 	
 
 private void prova(List<Product> candidata, int L, float budget) {
+		if(budget-tot<50) {
+			//System.out.println(candidata.toString());
 		if(this.isCompleta(candidata) && tot<budget) {
 			allRes.add(candidata);
+			System.out.println(candidata.toString());
 			if(tot<totBest && budget-tot<50) {
 				best= new ArrayList<>(candidata);
 				totBest=tot;
 			}
-	}else if(!(L==dao.totProdotti())) {
-		for(Product p: allP) {
-			if(!candidata.contains(p))
+	}}else if(!(L==dao.totProdotti())) {
+		rimanenti = new ArrayList<>(allP);
+		rimanenti.removeAll(candidata);
+		rimanenti.removeAll(scartati);
+		for(Product p: rimanenti) {
 			if(aggiuntaValida(p,candidata, budget)) {
 				candidata.add(p);
 				prova(candidata, L+1, budget);
 				candidata.remove(candidata.size()-1);
-			} 
+			} else scartati.add(p);
 			
 			//come faccio a bloccare se ho raggiunto il budget ma non è completa?
 		}
@@ -84,76 +94,76 @@ private boolean aggiuntaValida(Product p, List<Product> candidata2, float budget
 	}
 	
 	//la quantità di body, ghettine, calzini e tutine deve essere la stessa, massimo 5 minimo 2
-	if(p.getCategory()==("Body"))
+	if(p.getCategory().equals(("Body")))
 	if (controllore.get("Body")>5) {
 		return false;
 	}
-	if(p.getCategory()==("Ghettina"))
+	if(p.getCategory().equals(("Ghettina")))
 	if(controllore.get("Ghettina")>5){
 		return false;
 	}
-	if(p.getCategory()==("Calzini"))
+	if(p.getCategory().equals(("Calzini")))
 	if(controllore.get("Calzini")>5) {
 		return false;
 	}
-	if(p.getCategory()==("Tutina"))
+	if(p.getCategory().equals(("Tutina")))
 		if(controllore.get("Tutina")>5) {
 			return false;
 		}
 	
 	
 	//bastano due lenzuolini per culla
-	if(p.getCategory()=="Lenzuolino culla") //&& controllore.containsKey("Lenzuolino culla"))
+	if(p.getCategory().equals("Lenzuolino culla")) //&& controllore.containsKey("Lenzuolino culla"))
 			if(controllore.get("Lenzuolino culla")>2)
 		return false;
 	
 	//bastano due copertine per culla
-	if(p.getCategory()=="Copertina culla")// && controllore.containsKey("Copertina culla"))
+	if(p.getCategory().equals("Copertina culla"))// && controllore.containsKey("Copertina culla"))
 			if(controllore.get("Copertina culla")>2)
 		return false;
 	
-	if(p.getCategory()=="Copri materasso")// && controllore.containsKey("Copri materasso"))
+	if(p.getCategory().equals("Copri materasso"))// && controllore.containsKey("Copri materasso"))
 			if(controllore.get("Copri materasso")>2)
 		return false;
 	
-	if(p.getCategory()=="Cuscino culla")// &&  controllore.containsKey("Cuscino culla"))
+	if(p.getCategory().equals("Cuscino culla"))// &&  controllore.containsKey("Cuscino culla"))
 			if(controllore.get("Cuscino culla")>1)
 		return false;
 	
-	if(p.getCategory()=="Materasso culla")// && controllore.containsKey("Materasso culla"))
+	if(p.getCategory().equals("Materasso culla"))// && controllore.containsKey("Materasso culla"))
 			if(controllore.get("Materasso culla")>1)
 		return false;
 	
-	if(p.getCategory()=="Piumotto culla")// && controllore.containsKey("Piumotto culla"))
+	if(p.getCategory().equals("Piumotto culla"))// && controllore.containsKey("Piumotto culla"))
 			if(controllore.get("Piumotto culla")>2)
 		return false;
 	
-	if(p.getCategory()=="Cuscino culla")// && controllore.containsKey("Cuscino culla"))
+	if(p.getCategory().equals("Cuscino culla"))// && controllore.containsKey("Cuscino culla"))
 			if(controllore.get("Cuscino culla")>1)
 		return false;
 	
-	if(p.getCategory()=="Bavetta")// && controllore.containsKey("Bavetta"))
+	if(p.getCategory().equals("Bavetta"))// && controllore.containsKey("Bavetta"))
 			if(controllore.get("Bavetta")>10)
 		return false;
 	
-	if(p.getCategory()=="Cuffia")// && controllore.containsKey("Cuffia"))
-			if(controllore.get("Cuffia")>0)
+	if(p.getCategory().equals("Cuffia"))// && controllore.containsKey("Cuffia"))
+			if(controllore.get("Cuffia")>1)
 		return false;
 	
-	if(p.getCategory()=="Vestitino ")// && controllore.containsKey("Vestitino "))
+	if(p.getCategory().equals("Vestitino "))// && controllore.containsKey("Vestitino "))
 			if(controllore.get("Vestitino ")>3)
 		return false;
 	
-	if(p.getCategory()=="Lenzuolino lettino")// && controllore.containsKey("Lenzuolino lettino"))
+	if(p.getCategory().equals("Lenzuolino lettino"))// && controllore.containsKey("Lenzuolino lettino"))
 			if(controllore.get("Lenzuolino lettino")>2)
 		return false;
 	
 	//bastano due copertine per lettino
-	if(p.getCategory()=="Copertina lettino")// && controllore.containsKey("Copertina lettino"))
+	if(p.getCategory().equals("Copertina lettino"))// && controllore.containsKey("Copertina lettino"))
 			if(controllore.get("Copertina lettino")>2)
 		return false;
 	
-	if(p.getCategory()=="Fascia ombellicale")// && controllore.containsKey("Fascia ombellicale"))
+	if(p.getCategory().equals("Fascia ombellicale"))// && controllore.containsKey("Fascia ombellicale"))
 			if(controllore.get("Fascia ombellicale")>1)
 		return false;
 	
@@ -188,5 +198,7 @@ public String getBest(){
 		return best.toString()+"\n"+ totBest;
 	return null;
 }
+
+
 
 }
