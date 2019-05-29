@@ -56,7 +56,7 @@ public class Model {
 
 private void prova(List<Product> candidata, int L, float budget) {
 		if(budget-tot<50) {
-			//System.out.println(candidata.toString());
+			System.out.println(candidata.toString());
 		if(this.isCompleta(candidata) && tot<budget) {
 			allRes.add(candidata);
 			System.out.println(candidata.toString());
