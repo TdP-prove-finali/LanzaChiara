@@ -4,7 +4,7 @@ public class Product {
 	
 	private String id;
 	private String name;
-	private String category;
+	private Categories category;
 	private float price;
 	private String season;
 	private float sellerPrice;
@@ -20,10 +20,10 @@ public class Product {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getCategory() {
+	public Categories getCategory() {
 		return category;
 	}
-	public void setCategory(String category) {
+	public void setCategory(Categories category) {
 		this.category = category;
 	}
 	public float getPrice() {
@@ -44,7 +44,7 @@ public class Product {
 	public void setSellerPrice(float sellerPrice) {
 		this.sellerPrice = sellerPrice;
 	}
-	public Product(String id, String name, String category, float price, String season, float sellerPrice) {
+	public Product(String id, String name, Categories category, float price, String season, float sellerPrice) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -63,10 +63,16 @@ public class Product {
 	}
 	
 	
+	public Product(String id, String name, float price, String season, float sellerPrice) {
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.season = season;
+		this.sellerPrice = sellerPrice;
+	}
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", name=" + name + ", category=" + category + ", price=" + price + ", season="
-				+ season + ", sellerPrice=" + sellerPrice + "]";
+		return "Product name=" + name + ", category=" + category + ", price=" + price + ", sellerPrice=" + sellerPrice + "]";
 	}
 	@Override
 	public int hashCode() {
@@ -75,23 +81,7 @@ public class Product {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Product other = (Product) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-	
+
 	
 	
 	

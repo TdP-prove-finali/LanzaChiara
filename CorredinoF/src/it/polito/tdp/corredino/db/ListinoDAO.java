@@ -7,26 +7,29 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.polito.tdp.corredino.model.Categories;
 import it.polito.tdp.corredino.model.Product;
 
 
 public class ListinoDAO {
 	
-	List<Product> result = new ArrayList<>();
 	
-	public List<Product> getAllProduct(String season) {
+	
+	public List<Product> getAllProductCat(String season, Categories cat) {
 		
-		String sql = "SELECT idnum,NAME,category,price,season,sellerprice  FROM listino WHERE season=? or season =''";
-		
+		String sql = "SELECT idnum,NAME,category,price,season,sellerprice  FROM listino WHERE category=?  AND (season=? or season ='')";
+		List<Product> result = new ArrayList<>();
 		
 		try {
 			Connection conn = ConnectDB.getConnection();
 			PreparedStatement st = conn.prepareStatement(sql);
-			st.setString(1, season);
+			st.setString(1, cat.getCategoria());
+			st.setString(2, season);
 			ResultSet res = st.executeQuery();
 
 			while (res.next()) {
-				Product p = new Product(res.getString("idnum"), res.getString("NAME"), res.getString("category"), res.getFloat("price"), res.getString("season"), res.getFloat("sellerprice"));
+				Product p = new Product(res.getString("idnum"), res.getString("NAME"), res.getFloat("price"), res.getString("season"), res.getFloat("sellerprice"));
+				p.setCategory(cat);
 				result.add(p);
 			}
 
@@ -55,9 +58,9 @@ public class ListinoDAO {
 	
 	}*/
 	
-	public List<String> getAllCat(){
-	String sql = "SELECT DISTINCT(category) FROM listino ";
-	List<String> result = new ArrayList<>();
+	public List<Categories> getAllCat(){
+	String sql = "SELECT c.Categoria,c.MIN,c.MAX,c.Proporzione, AVG(l.price) FROM categorie c, listino l WHERE l.category=c.Categoria GROUP BY l.category ORDER BY AVG(l.price) desc";
+	List<Categories> result = new ArrayList<>();
 		
 		
 		try {
@@ -66,7 +69,7 @@ public class ListinoDAO {
 			ResultSet res = st.executeQuery();
 
 			while (res.next()) {
-				String c = res.getString("category");
+				Categories c = new Categories(res.getString("c.Categoria"),res.getInt("c.Min"),res.getInt("c.Max"),res.getDouble("c.Proporzione"));
 				result.add(c);
 			}
 

@@ -81,7 +81,8 @@ public class CorredinoController {
     		txtResult.appendText("Inserisci un budget reale (Minimo 100 euro)\n");
     	if(!txtBdg.getText().isEmpty() && season.getValue()!=null) {
     	model.calcola(Integer.parseInt(txtBdg.getText()), season.getValue());
-    	txtResult.appendText(model.getBest());}
+   // 	txtResult.appendText(model.getBest());
+    	}
 
     }
 
