@@ -13,6 +13,12 @@ public class Categories {
 		this.max = max;
 		this.proporzione = proporzione;
 	}
+	public Categories(Categories c) {
+		this.categoria = c.categoria;
+		this.min = c.min;
+		this.max = c.max;
+		this.proporzione = c.proporzione;
+	}
 	public String getCategoria() {
 		return categoria;
 	}

@@ -3,9 +3,10 @@ package it.polito.tdp.corredino.model;
 public class TestModel {
 
 	public static void main(String[] args) {
-	 Model model = new Model();
+	 Modeld model = new Modeld();
 //	 System.out.println(model.tutine());
-	 System.out.println(model.calcola(50, "Estate"));
+	 System.out.println(model.calcola(200, "Inverno"));
+	 System.out.println(model.getBest());
 	}
 
 }

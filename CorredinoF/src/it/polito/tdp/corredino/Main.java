@@ -1,7 +1,8 @@
 package it.polito.tdp.corredino;
 	
 
-import it.polito.tdp.corredino.model.Model;
+
+import it.polito.tdp.corredino.model.Modeld;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -18,7 +19,7 @@ public class Main extends Application {
 			
 			CorredinoController controller = loader.getController();
 			
-			Model model = new Model();
+			Modeld model = new Modeld();
 			
 			controller.setModel(model);
 			

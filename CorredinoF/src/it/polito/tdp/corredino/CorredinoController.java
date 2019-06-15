@@ -7,7 +7,7 @@ package it.polito.tdp.corredino;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import it.polito.tdp.corredino.model.Model;
+import it.polito.tdp.corredino.model.Modeld;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -18,7 +18,7 @@ import javafx.scene.control.ComboBox;
 
 public class CorredinoController {
 	
-	Model model;
+	Modeld model;
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -70,6 +70,20 @@ public class CorredinoController {
     void CalcolaMin(ActionEvent event) {
 
     }
+    
+
+    @FXML
+    void clientInit(ActionEvent event) {
+    	buttonMin.setDisable(false);
+    	btnMaxItem.setDisable(false);
+    	btnTutti.setDisable(false);
+
+    }
+
+    @FXML
+    void sellerInit(ActionEvent event) {
+
+    }
 
     @FXML
     void MostraTutti(ActionEvent event) {
@@ -80,8 +94,8 @@ public class CorredinoController {
     	if(Integer.parseInt(txtBdg.getText())<100)
     		txtResult.appendText("Inserisci un budget reale (Minimo 100 euro)\n");
     	if(!txtBdg.getText().isEmpty() && season.getValue()!=null) {
-    	model.calcola(Integer.parseInt(txtBdg.getText()), season.getValue());
-   // 	txtResult.appendText(model.getBest());
+    		txtResult.appendText(model.calcola(Integer.parseInt(txtBdg.getText()), season.getValue()).toString());
+    	
     	}
 
     }
@@ -121,7 +135,7 @@ public class CorredinoController {
 
     }
 
-	public void setModel(Model model) {
+	public void setModel(Modeld model) {
 		this.model=model;
 		season.getItems().addAll("Inverno", "Autunno/Primavera", "Estate");
 		buttonMin.setDisable(true);

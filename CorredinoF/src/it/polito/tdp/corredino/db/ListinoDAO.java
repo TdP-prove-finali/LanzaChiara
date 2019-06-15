@@ -58,14 +58,15 @@ public class ListinoDAO {
 	
 	}*/
 	
-	public List<Categories> getAllCat(){
-	String sql = "SELECT c.Categoria,c.MIN,c.MAX,c.Proporzione, AVG(l.price) FROM categorie c, listino l WHERE l.category=c.Categoria GROUP BY l.category ORDER BY AVG(l.price) desc";
+	public List<Categories> getAllCat(String season){
+	String sql = "SELECT c.Categoria,c.MIN,c.MAX,c.Proporzione, AVG(l.price) FROM categorie c, listino l WHERE (l.season=? || l.season='') AND  l.category=c.Categoria GROUP BY l.category ORDER BY AVG(l.price) desc";
 	List<Categories> result = new ArrayList<>();
 		
 		
 		try {
 			Connection conn = ConnectDB.getConnection();
 			PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1, season);
 			ResultSet res = st.executeQuery();
 
 			while (res.next()) {
