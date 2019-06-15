@@ -2,6 +2,7 @@ package it.polito.tdp.corredino.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,6 +43,7 @@ public class Modeld {
 		
 		//inizializzo tolleranza e margine qui 
 		this.tolleranza=0.5;
+		
 		this.marg=0.15;
 		
 	}
@@ -230,17 +232,86 @@ public class Modeld {
 		return false;
 	}
 
-	public List<List<Integer>> getAll(){
-		return combinazioni;
+	List<Corredino> ris;
+	public void getAll(){
+		
+		ris= new ArrayList<>();
+		for(List<Integer> li : combinazioni) {
+			String ret="";
+			int tot=0;
+			for(int i=0;i <li.size();i++) {
+				if(li.get(i)!=0)
+					ret += allP.get(i).getName()+" "+li.get(i)+"\n";
+				tot += allP.get(i).getPrice()*li.get(i);
+			}
+			ris.add(new Corredino(ret, tot));
+		}
+		
+		Collections.sort(ris);
+		
+	}
+	
+	public List<Corredino> returnAll(){
+		return ris;
 	}
 	
 	public String getBest(){
 		String ret="";
-		for(int i=0;i<best.size();i++) {
+		int tot=0;
+		for(int i=0;i <best.size();i++) {
 			if(best.get(i)!=0)
-			ret +=allP.get(i).getName()+" "+best.get(i)+"\n";
+				ret += allP.get(i).getName()+" "+best.get(i)+"\n";
+			tot += allP.get(i).getPrice()*best.get(i);
 		}
-		return ret;
+		Corredino b = new Corredino(ret,tot);
+		return b.toString();
+	}
+	
+
+	List<CorredinoSeller> res;
+	int maxItem=0;
+	CorredinoSeller maxIt=new CorredinoSeller();
+	
+	public void getAllSeller() {
+		
+		int att=0;
+		res= new ArrayList<>();
+		for(List<Integer> li : combinazioni) {
+			String ret="";
+			double tot=0;
+			double income=0;
+			att=0;
+			for(int i=0;i <li.size();i++) {
+				if(li.get(i)!=0)
+					ret += allP.get(i).getName()+" "+li.get(i)+"\n";
+				tot += allP.get(i).getPrice()*li.get(i);
+				income += (allP.get(i).getPrice()-allP.get(i).getSellerPrice())*li.get(i);
+				att +=li.get(i);
+			}
+			
+			res.add(new CorredinoSeller(ret, tot, income));
+			
+			if(att>maxItem) {
+				maxItem=att;
+				maxIt= new CorredinoSeller(ret,tot,income);
+			}
+		}
+		
+		Collections.sort(res);
+		
+	}
+	
+	public String returnAllSeller() {
+		return res.toString();
+	}
+	
+	public String getMaxIncome() {
+		return res.get(res.size()-1).toString();
+	}
+	
+	public String getMaxItem() {
+		
+		return maxIt.toString()+" con "+maxItem+" prodotti venduti.";
 	}
 
 

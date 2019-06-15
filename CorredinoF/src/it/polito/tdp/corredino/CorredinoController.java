@@ -13,7 +13,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.control.ComboBox;
 
 public class CorredinoController {
@@ -63,11 +62,13 @@ public class CorredinoController {
 
     @FXML
     void CalcolaMaxIncome(ActionEvent event) {
-
+    	txtResult.appendText(model.getMaxIncome());
     }
 
     @FXML
     void CalcolaMin(ActionEvent event) {
+    	
+    	txtResult.appendText(model.getBest());
 
     }
     
@@ -75,18 +76,8 @@ public class CorredinoController {
     @FXML
     void clientInit(ActionEvent event) {
     	buttonMin.setDisable(false);
-    	btnMaxItem.setDisable(false);
+    	btnMaxC.setDisable(false);
     	btnTutti.setDisable(false);
-
-    }
-
-    @FXML
-    void sellerInit(ActionEvent event) {
-
-    }
-
-    @FXML
-    void MostraTutti(ActionEvent event) {
     	if(txtBdg.getText().isEmpty())
     		txtResult.appendText("Inserisci un budget\n");
     	if(season.getValue()==null)
@@ -94,30 +85,50 @@ public class CorredinoController {
     	if(Integer.parseInt(txtBdg.getText())<100)
     		txtResult.appendText("Inserisci un budget reale (Minimo 100 euro)\n");
     	if(!txtBdg.getText().isEmpty() && season.getValue()!=null) {
-    		txtResult.appendText(model.calcola(Integer.parseInt(txtBdg.getText()), season.getValue()).toString());
+    		model.calcola(Integer.parseInt(txtBdg.getText()), season.getValue());
+    		model.getAll();
+    		}
+    		
+
+    }
+
+    @FXML
+    void sellerInit(ActionEvent event) {
+
+    	btnMaxIncome.setDisable(false);
+    	btnMaxItem.setDisable(false);
+    	btnTuttiv2.setDisable(false);
+    	if(txtBdg.getText().isEmpty())
+    		txtResult.appendText("Inserisci un budget\n");
+    	if(season.getValue()==null)
+    		txtResult.appendText("Inserisci la stagione in cui nascerà il bambino\n");
+    	if(Integer.parseInt(txtBdg.getText())<100)
+    		txtResult.appendText("Inserisci un budget reale (Minimo 100 euro)\n");
+    	if(!txtBdg.getText().isEmpty() && season.getValue()!=null) {
+    		model.calcola(Integer.parseInt(txtBdg.getText()), season.getValue());
+    		model.getAllSeller();}
+    }
+
+    @FXML
+    void MostraTutti(ActionEvent event) {
+    	
+    		txtResult.appendText(model.returnAll().toString());
     	
     	}
 
-    }
+    
 
     @FXML
     void MostraTuttiv2(ActionEvent event) {
 
+    	txtResult.appendText(model.returnAllSeller());
     }
 
-    @FXML
-    void Reset(ActionEvent event) {
-
-    }
-
-    @FXML
-    void Result(MouseEvent event) {
-
-    }
+ 
 
     @FXML
     void calcolaMaxItem(ActionEvent event) {
-
+    	txtResult.appendText(model.getMaxItem());
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -130,7 +141,6 @@ public class CorredinoController {
         assert btnMaxItem != null : "fx:id=\"btnMaxItem\" was not injected: check your FXML file 'Corredino.fxml'.";
         assert btnTuttiv2 != null : "fx:id=\"btnTuttiv2\" was not injected: check your FXML file 'Corredino.fxml'.";
         assert txtResult != null : "fx:id=\"txtResult\" was not injected: check your FXML file 'Corredino.fxml'.";
-        assert btnReset != null : "fx:id=\"btnReset\" was not injected: check your FXML file 'Corredino.fxml'.";
         assert season != null : "fx:id=\"season\" was not injected: check your FXML file 'Corredino.fxml'.";
 
     }
