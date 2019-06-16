@@ -45,7 +45,7 @@
             </HBox>
             <HBox prefHeight="46.0" prefWidth="400.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#clientInit" prefHeight="30.0" prefWidth="220.0" style="-fx-background-color: 66ff00;" text="Client side">
+                  <Button mnemonicParsing="false" onAction="#clientInit" prefHeight="30.0" prefWidth="220.0"  text="Client side">
                      <HBox.margin>
                         <Insets left="95.0" top="10.0" />
                      </HBox.margin>

@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import it.polito.tdp.corredino.db.ListinoDAO;
 
-public class Modeld {
+public class Model {
 	
 	private ListinoDAO dao;
 	
@@ -38,7 +38,7 @@ public class Modeld {
 		this.tolleranza = intervallo;
 	}
 
-	public Modeld() {
+	public Model() {
 		dao= new ListinoDAO();
 		
 		//inizializzo tolleranza e margine qui 
@@ -232,23 +232,40 @@ public class Modeld {
 		return false;
 	}
 
-	List<Corredino> ris;
+	private List<Corredino> ris;
+	private Corredino maxItC;
 	public void getAll(){
 		
+		
 		ris= new ArrayList<>();
+		int indexCatVecchia=0;
 		for(List<Integer> li : combinazioni) {
+			int att=0;
 			String ret="";
 			int tot=0;
 			for(int i=0;i <li.size();i++) {
-				if(li.get(i)!=0)
+				if(li.get(i)!=0) {
 					ret += allP.get(i).getName()+" "+li.get(i)+"\n";
-				tot += allP.get(i).getPrice()*li.get(i);
+					tot += allP.get(i).getPrice()*li.get(i);
+					if(i!=0)
+					if(!allP.get(i).getCategory().equals(allP.get(indexCatVecchia).getCategory())) {
+						att++;
+						indexCatVecchia=i;}
+				}
 			}
 			ris.add(new Corredino(ret, tot));
+			if (att>maxItem)
+				maxItem=att;
+				maxItC = new Corredino(ret,tot);
 		}
 		
 		Collections.sort(ris);
 		
+	}
+	
+	
+	public String  getMaxC() {
+		return maxItC.toString()+" con "+maxItem+" diverse categorie di prodotti.";
 	}
 	
 	public List<Corredino> returnAll(){
