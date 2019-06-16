@@ -88,11 +88,16 @@ public class CorredinoController {
     		txtResult.appendText("Inserisci un budget reale (Minimo 100 euro)\n");
     		return;}
     	if(!txtBdg.getText().isEmpty() && season.getValue()!=null) {
+    		String seas="";
+    		if(season.getValue().equals("Autunno/Primavera")) {
+    			seas="Primavera";
+    		} else
+    			seas=season.getValue();
     		txtResult.clear();
     		buttonMin.setDisable(false);
         	btnMaxC.setDisable(false);
         	btnTutti.setDisable(false);
-    		model.calcola(Integer.parseInt(txtBdg.getText()), season.getValue());
+    		model.calcola(Integer.parseInt(txtBdg.getText()), seas);
     		model.getAll();
     		}
     		
@@ -113,11 +118,16 @@ public class CorredinoController {
     		txtResult.appendText("Inserisci un budget reale (Minimo 100 euro)\n");
     		return;}
     	if(!txtBdg.getText().isEmpty() && season.getValue()!=null) {
+    		String seas="";
+    		if(season.getValue().equals("Autunno/Primavera")) {
+    			seas="Primavera";
+    		} else
+    			seas=season.getValue();
     		txtResult.clear();
     		btnMaxIncome.setDisable(false);
         	btnMaxItem.setDisable(false);
         	btnTuttiv2.setDisable(false);
-    		model.calcola(Integer.parseInt(txtBdg.getText()), season.getValue());
+    		model.calcola(Integer.parseInt(txtBdg.getText()), seas);
     		model.getAllSeller();}
     }
 
@@ -160,6 +170,7 @@ public class CorredinoController {
 
 	public void setModel(Model model) {
 		this.model=model;
+		//aggiungo la stagione Autuno/PRimavera anche se sul db c'è solo pprimavera per completezza, prima di iniziare a lavorare però lo modifico opportunamente
 		season.getItems().addAll("Inverno", "Autunno/Primavera", "Estate");
 		buttonMin.setDisable(true);
 		btnMaxC.setDisable(true);

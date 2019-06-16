@@ -14,6 +14,10 @@ public Corredino(String corredino, double tot) {
 	this.tot = tot;
 }
 
+public Corredino() {
+	// TODO Auto-generated constructor stub
+}
+
 public String getCorredino() {
 	return corredino;
 }

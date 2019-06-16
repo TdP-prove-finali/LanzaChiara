@@ -233,7 +233,7 @@ public class Model {
 	}
 
 	private List<Corredino> ris;
-	private Corredino maxItC;
+	private Corredino maxItC= new Corredino();
 	public void getAll(){
 		
 		
