@@ -28,7 +28,7 @@ public class ListinoDAO {
 			ResultSet res = st.executeQuery();
 
 			while (res.next()) {
-				Product p = new Product(res.getString("idnum"), res.getString("NAME"), res.getFloat("price"), res.getString("season"), res.getFloat("sellerprice"));
+				Product p = new Product(res.getString("idnum"), res.getString("NAME"), res.getDouble("price"), res.getString("season"), res.getDouble("sellerprice"));
 				p.setCategory(cat);
 				result.add(p);
 			}
@@ -104,6 +104,27 @@ public class ListinoDAO {
 			throw new RuntimeException(e);
 		}
 		
+	}
+
+	public double getmin() {
+		String sql = "SELECT MIN(l.price) AS min FROM listino l";
+		double r=0;
+		
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			ResultSet res = st.executeQuery();
+
+			if(res.next())
+				r=res.getInt("min");
+			conn.close();
+			
+			return r;
+			
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
 	

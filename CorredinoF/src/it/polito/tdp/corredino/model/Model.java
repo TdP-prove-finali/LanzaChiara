@@ -3,6 +3,7 @@ package it.polito.tdp.corredino.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,7 @@ public class Model {
 	private List<List<Integer>> combinazioni;
 	private List<Integer> best;
 	private double totBest;
+	private double min;
 	
 	private double tolleranza;
 	
@@ -41,10 +43,13 @@ public class Model {
 	public Model() {
 		dao= new ListinoDAO();
 		
-		//inizializzo tolleranza e margine qui 
-		this.tolleranza=0.5;
+		//prendo dal dao il costo minimo dei prodotti (mi serve per un controllo nella ricorsione, per evitare calcoli inutili)
+		min=dao.getmin();
 		
-		this.marg=0.15;
+		//inizializzo tolleranza e margine qui 
+		this.tolleranza=0.1;
+		
+		this.marg=0.05;
 		
 	}
 	
@@ -123,6 +128,10 @@ public class Model {
 
 		if(max2<max)
 			max=max2;
+		
+		//controllo se posso aggiungere ancora o è inutile 
+		if(budget-tot<min)
+			return;
 		
 		
 		for(int q=0;q<max;q++) {
@@ -232,20 +241,23 @@ public class Model {
 		return false;
 	}
 
-	private List<Corredino> ris;
-	private Corredino maxItC= new Corredino();
-	public void getAll(){
+	private List<CorredinoSeller> ris;
+	private CorredinoSeller maxItC= new CorredinoSeller();
+	
+	public List<CorredinoSeller> getAll() {
 		
+		CorredinoSeller b = new CorredinoSeller();
 		
-		ris= new ArrayList<>();
+		ris= new LinkedList<>();
 		int indexCatVecchia=0;
 		for(List<Integer> li : combinazioni) {
+			double tot=0;
 			int att=0;
-			String ret="";
-			int tot=0;
+			b = new CorredinoSeller();
 			for(int i=0;i <li.size();i++) {
 				if(li.get(i)!=0) {
-					ret += allP.get(i).getName()+" "+li.get(i)+"\n";
+					ProdottoCorredino temp= new ProdottoCorredino(allP.get(i).getName(),li.get(i),(double)allP.get(i).getPrice(),0.0);
+					b.addP(temp);
 					tot += allP.get(i).getPrice()*li.get(i);
 					if(i!=0)
 					if(!allP.get(i).getCategory().equals(allP.get(indexCatVecchia).getCategory())) {
@@ -253,14 +265,15 @@ public class Model {
 						indexCatVecchia=i;}
 				}
 			}
-			ris.add(new Corredino(ret, tot));
+			b.setTot(tot);
+			ris.add(b);
 			if (att>maxItem)
 				maxItem=att;
-				maxItC = new Corredino(ret,tot);
+				maxItC = new CorredinoSeller(b.getP(),b.getTot());
 		}
 		
 		Collections.sort(ris);
-		
+		return ris;
 	}
 	
 	
@@ -268,20 +281,21 @@ public class Model {
 		return maxItC.toString()+" con "+maxItem+" diverse categorie di prodotti.";
 	}
 	
-	public List<Corredino> returnAll(){
+	public List<CorredinoSeller> returnAll(){
 		return ris;
 	}
 	
-	public String getBest(){
-		String ret="";
+	public CorredinoSeller getBest(){
+		CorredinoSeller b = new CorredinoSeller();
 		int tot=0;
 		for(int i=0;i <best.size();i++) {
-			if(best.get(i)!=0)
-				ret += allP.get(i).getName()+" "+best.get(i)+"\n";
-			tot += allP.get(i).getPrice()*best.get(i);
-		}
-		Corredino b = new Corredino(ret,tot);
-		return b.toString();
+			if(best.get(i)!=0) {
+				ProdottoCorredino temp= new ProdottoCorredino(allP.get(i).getName(),best.get(i),(double)allP.get(i).getPrice(),0.0);
+				b.addP(temp);
+				tot += allP.get(i).getPrice()*best.get(i);
+		}}
+		b.setTot(tot);
+		return b;
 	}
 	
 
@@ -289,41 +303,46 @@ public class Model {
 	int maxItem=0;
 	CorredinoSeller maxIt=new CorredinoSeller();
 	
-	public void getAllSeller() {
+	public List<CorredinoSeller> getAllSeller(){
 		
+		CorredinoSeller cs=new CorredinoSeller();
 		int att=0;
 		res= new ArrayList<>();
 		for(List<Integer> li : combinazioni) {
-			String ret="";
 			double tot=0;
 			double income=0;
 			att=0;
+			cs=new CorredinoSeller();
 			for(int i=0;i <li.size();i++) {
-				if(li.get(i)!=0)
-					ret += allP.get(i).getName()+" "+li.get(i)+"\n";
+				if(li.get(i)!=0) {	
+				ProdottoCorredino temp= new ProdottoCorredino(allP.get(i).getName(),li.get(i),(double)allP.get(i).getPrice(),(double)allP.get(i).getSellerPrice());
+				cs.addP(temp);
 				tot += allP.get(i).getPrice()*li.get(i);
 				income += (allP.get(i).getPrice()-allP.get(i).getSellerPrice())*li.get(i);
 				att +=li.get(i);
 			}
-			
-			res.add(new CorredinoSeller(ret, tot, income));
+			cs.setTot(tot);
+			cs.setIncomeTot(income);
+			res.add(cs);
 			
 			if(att>maxItem) {
 				maxItem=att;
-				maxIt= new CorredinoSeller(ret,tot,income);
+				maxIt= new CorredinoSeller(cs.getP(),cs.getTot(),cs.getIncomeTot());
 			}
+		}
 		}
 		
 		Collections.sort(res);
+		return res;
 		
 	}
 	
-	public String returnAllSeller() {
-		return res.toString();
+	public List<CorredinoSeller> returnAllSeller() {
+		return res;
 	}
 	
-	public String getMaxIncome() {
-		return res.get(res.size()-1).toString();
+	public CorredinoSeller getMaxIncome() {
+		return res.get(res.size()-1);
 	}
 	
 	public String getMaxItem() {

@@ -5,9 +5,9 @@ public class Product {
 	private String id;
 	private String name;
 	private Categories category;
-	private float price;
+	private double price;
 	private String season;
-	private float sellerPrice;
+	private double sellerPrice;
 	public String getId() {
 		return id;
 	}
@@ -26,10 +26,10 @@ public class Product {
 	public void setCategory(Categories category) {
 		this.category = category;
 	}
-	public float getPrice() {
+	public double getPrice() {
 		return price;
 	}
-	public void setPrice(float price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 	public String getSeason() {
@@ -38,13 +38,13 @@ public class Product {
 	public void setSeason(String season) {
 		this.season = season;
 	}
-	public float getSellerPrice() {
+	public double getSellerPrice() {
 		return sellerPrice;
 	}
-	public void setSellerPrice(float sellerPrice) {
+	public void setSellerPrice(double sellerPrice) {
 		this.sellerPrice = sellerPrice;
 	}
-	public Product(String id, String name, Categories category, float price, String season, float sellerPrice) {
+	public Product(String id, String name, Categories category, double price, String season, double sellerPrice) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -63,12 +63,12 @@ public class Product {
 	}
 	
 	
-	public Product(String id, String name, float price, String season, float sellerPrice) {
+	public Product(String id, String name, double d, String season, double e) {
 		this.id = id;
 		this.name = name;
-		this.price = price;
+		this.price = d;
 		this.season = season;
-		this.sellerPrice = sellerPrice;
+		this.sellerPrice = e;
 	}
 	@Override
 	public String toString() {

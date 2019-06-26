@@ -4,20 +4,29 @@
 
 package it.polito.tdp.corredino;
 
+
+import it.polito.tdp.corredino.model.CorredinoSeller;
+import it.polito.tdp.corredino.model.Model;
+import it.polito.tdp.corredino.model.ProdottoCorredino;
+
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import it.polito.tdp.corredino.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+
 
 public class CorredinoController {
 	
 	Model model;
+	
+    @FXML // fx:id="txtResult"
+    private TextField txtResult; // Value injected by FXMLLoader
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -49,11 +58,23 @@ public class CorredinoController {
     @FXML // fx:id="btnTuttiv2"
     private Button btnTuttiv2; // Value injected by FXMLLoader
 
-    @FXML // fx:id="txtResult"
-    private TextArea txtResult; // Value injected by FXMLLoader
+    @FXML // fx:id="table"
+    private TableView<ProdottoCorredino> table; // Value injected by FXMLLoader
 
-    @FXML // fx:id="btnReset"
-    private Button btnReset; // Value injected by FXMLLoader
+    @FXML // fx:id="product"
+    private TableColumn<ProdottoCorredino, String> product; // Value injected by FXMLLoader
+
+    @FXML // fx:id="qnt"
+    private TableColumn<ProdottoCorredino, Integer> qnt; // Value injected by FXMLLoader
+
+    @FXML // fx:id="price"
+    private TableColumn<ProdottoCorredino, Double> price; // Value injected by FXMLLoader
+
+    @FXML // fx:id="sellerPrice"
+    private TableColumn<ProdottoCorredino, Double> sellerPrice; // Value injected by FXMLLoader
+
+    @FXML // fx:id="combinazioni"
+    private TextField combinazioni; // Value injected by FXMLLoader
 
     @FXML
     void CalcolaMaxC(ActionEvent event) {
@@ -64,20 +85,36 @@ public class CorredinoController {
     @FXML
     void CalcolaMaxIncome(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText(model.getMaxIncome());
+    	table.getItems().clear();
+    	for(ProdottoCorredino pq: model.getMaxIncome().getP())
+    	this.table.getItems().add(pq);
+    	this.product.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,String>("prod"));
+    	this.qnt.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Integer>("quantita"));
+    	this.price.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Double>("costo"));
+    	this.sellerPrice.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Double>("sellerIncome"));
+    	
+    	
     }
 
     @FXML
     void CalcolaMin(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText(model.getBest());
-
+    	table.getItems().clear();
+    	for(ProdottoCorredino pq: model.getBest().getP()) {
+    	this.table.getItems().add(pq);
+    	this.product.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,String>("name"));
+    	this.qnt.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Integer>("quantita"));
+    	this.price.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Double>("costo"));
+    	this.sellerPrice.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Double>("sellerIncome"));
+    	}
     }
     
 
     @FXML
-    void clientInit(ActionEvent event) {
-    	
+    void clientInit(ActionEvent event) throws CloneNotSupportedException {
+    	this.sellerPrice.setVisible(false);
+    	this.table.setVisible(true);
+    	table.getItems().clear();
     	if(txtBdg.getText().isEmpty()) {
     		txtResult.appendText("Inserisci un budget\n");
     		return;}
@@ -105,9 +142,10 @@ public class CorredinoController {
     }
 
     @FXML
-    void sellerInit(ActionEvent event) {
-
-    	
+    void sellerInit(ActionEvent event) throws CloneNotSupportedException {
+    	this.sellerPrice.setVisible(true);
+    	this.table.setVisible(true);
+    	table.getItems().clear();
     	if(txtBdg.getText().isEmpty()) {
     		txtResult.appendText("Inserisci un budget\n");
     		return;}
@@ -132,18 +170,50 @@ public class CorredinoController {
     }
 
     @FXML
-    void MostraTutti(ActionEvent event) {
-    		txtResult.clear();
-    		txtResult.appendText(model.returnAll().toString());
+    void MostraTutti(ActionEvent event)  {
+    	table.getItems().clear();
+    	txtResult.clear();
     	
-    	}
+    	for(CorredinoSeller cs: model.getAll()) {
+    		for(ProdottoCorredino pq: cs.getP()) {
+    		this.table.getItems().addAll(pq);
+    		this.product.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,String>("name"));
+        	this.qnt.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Integer>("quantita"));
+        	this.price.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Double>("costo"));
+    		}
+    		
+    		this.table.getItems().addAll(new ProdottoCorredino(cs.getTot()));
+    		this.product.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,String>("name"));
+        	
+    		this.price.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Double>("costo"));
+        	
+    		this.table.getItems().add(null);
+    		this.table.getItems().add(null);
+    	}	
+    }
 
     
 
     @FXML
     void MostraTuttiv2(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText(model.returnAllSeller());
+    	table.getItems().clear();
+    	for(CorredinoSeller cs: model.getAllSeller()) {
+    		for(ProdottoCorredino pq: cs.getP()) {
+    			this.table.getItems().addAll(pq);
+		    	this.product.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,String>("name"));
+		    	this.qnt.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Integer>("quantita"));
+		    	this.price.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Double>("costo"));
+		    	this.sellerPrice.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Double>("sellerIncome"));
+    		}
+    		this.table.getItems().addAll(new ProdottoCorredino(cs.getTot(), cs.getIncomeTot()));
+    		this.product.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,String>("name"));
+        	
+    		this.price.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Double>("costo"));
+        	
+    		this.table.getItems().add(null);
+    		this.table.getItems().add(null);
+    	}
     }
 
  
@@ -151,6 +221,7 @@ public class CorredinoController {
     @FXML
     void calcolaMaxItem(ActionEvent event) {
     	txtResult.clear();
+    	table.getItems().clear();
     	txtResult.appendText(model.getMaxItem());
     }
 
@@ -163,9 +234,15 @@ public class CorredinoController {
         assert btnMaxIncome != null : "fx:id=\"btnMaxIncome\" was not injected: check your FXML file 'Corredino.fxml'.";
         assert btnMaxItem != null : "fx:id=\"btnMaxItem\" was not injected: check your FXML file 'Corredino.fxml'.";
         assert btnTuttiv2 != null : "fx:id=\"btnTuttiv2\" was not injected: check your FXML file 'Corredino.fxml'.";
-        assert txtResult != null : "fx:id=\"txtResult\" was not injected: check your FXML file 'Corredino.fxml'.";
         assert season != null : "fx:id=\"season\" was not injected: check your FXML file 'Corredino.fxml'.";
-
+        assert table != null : "fx:id=\"table\" was not injected: check your FXML file 'Corredino.fxml'.";
+        assert product != null : "fx:id=\"product\" was not injected: check your FXML file 'Corredino.fxml'.";
+        assert qnt != null : "fx:id=\"qnt\" was not injected: check your FXML file 'Corredino.fxml'.";
+        assert price != null : "fx:id=\"price\" was not injected: check your FXML file 'Corredino.fxml'.";
+        assert sellerPrice != null : "fx:id=\"sellerPrice\" was not injected: check your FXML file 'Corredino.fxml'.";
+        assert combinazioni != null : "fx:id=\"combinazioni\" was not injected: check your FXML file 'Corredino.fxml'.";
+        assert txtResult != null : "fx:id=\"txtResult\" was not injected: check your FXML file 'Corredino.fxml'.";
+        
     }
 
 	public void setModel(Model model) {
@@ -179,6 +256,7 @@ public class CorredinoController {
 		btnMaxItem.setDisable(true);
 		btnTuttiv2.setDisable(true);
 		
+		table.setVisible(false);
 		
 		
 	}
