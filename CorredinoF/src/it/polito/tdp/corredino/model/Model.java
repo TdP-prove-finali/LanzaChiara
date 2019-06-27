@@ -247,7 +247,7 @@ public class Model {
 	public List<CorredinoSeller> getAll() {
 		
 		CorredinoSeller b = new CorredinoSeller();
-		
+		maxItem=0;
 		ris= new LinkedList<>();
 		int indexCatVecchia=0;
 		for(List<Integer> li : combinazioni) {
@@ -260,16 +260,17 @@ public class Model {
 					b.addP(temp);
 					tot += allP.get(i).getPrice()*li.get(i);
 					if(i!=0)
+					//contatore di categorie nel corredino
 					if(!allP.get(i).getCategory().equals(allP.get(indexCatVecchia).getCategory())) {
 						att++;
 						indexCatVecchia=i;}
 				}
 			}
-			b.setTot(tot);
+			b.setTot((double)tot);
 			ris.add(b);
-			if (att>maxItem)
+			if (att>maxItem) {
 				maxItem=att;
-				maxItC = new CorredinoSeller(b.getP(),b.getTot());
+				maxItC = new CorredinoSeller(b.getP(),(double)b.getTot());}
 		}
 		
 		Collections.sort(ris);
@@ -277,8 +278,11 @@ public class Model {
 	}
 	
 	
-	public String  getMaxC() {
-		return maxItC.toString()+" con "+maxItem+" diverse categorie di prodotti.";
+	public CorredinoSeller  getMaxC() {
+		return maxItC;
+	}
+	public int categorie() {
+		return this.maxItem;
 	}
 	
 	public List<CorredinoSeller> returnAll(){
@@ -287,7 +291,7 @@ public class Model {
 	
 	public CorredinoSeller getBest(){
 		CorredinoSeller b = new CorredinoSeller();
-		int tot=0;
+		Double tot=0.0;
 		for(int i=0;i <best.size();i++) {
 			if(best.get(i)!=0) {
 				ProdottoCorredino temp= new ProdottoCorredino(allP.get(i).getName(),best.get(i),(double)allP.get(i).getPrice(),0.0);
@@ -320,16 +324,15 @@ public class Model {
 				tot += allP.get(i).getPrice()*li.get(i);
 				income += (allP.get(i).getPrice()-allP.get(i).getSellerPrice())*li.get(i);
 				att +=li.get(i);
-			}
+			}}
 			cs.setTot(tot);
 			cs.setIncomeTot(income);
 			res.add(cs);
-			
 			if(att>maxItem) {
 				maxItem=att;
-				maxIt= new CorredinoSeller(cs.getP(),cs.getTot(),cs.getIncomeTot());
+				maxIt= new CorredinoSeller(cs.getP(),(double)cs.getTot(),cs.getIncomeTot());
 			}
-		}
+		
 		}
 		
 		Collections.sort(res);
@@ -345,9 +348,13 @@ public class Model {
 		return res.get(res.size()-1);
 	}
 	
-	public String getMaxItem() {
+	public CorredinoSeller getMaxItem() {
 		
-		return maxIt.toString()+" con "+maxItem+" prodotti venduti.";
+		return maxIt;
+	}
+	
+	public int maxItN() {
+		return maxItem;
 	}
 
 

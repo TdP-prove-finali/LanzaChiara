@@ -79,27 +79,38 @@ public class CorredinoController {
     @FXML
     void CalcolaMaxC(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText(model.getMaxC());
+    	table.getItems().clear();
+    	combinazioni.clear();
+    	for(ProdottoCorredino pq: model.getMaxC().getP())
+    	this.table.getItems().add(pq);
+    	this.product.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,String>("name"));
+    	this.qnt.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Integer>("quantita"));
+    	this.price.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Double>("costo"));
+    	this.sellerPrice.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Double>("sellerIncome"));
+    	
+    	this.txtResult.appendText("Corredino con "+model.categorie()+" categorie diverse:");
     }
 
     @FXML
     void CalcolaMaxIncome(ActionEvent event) {
     	txtResult.clear();
     	table.getItems().clear();
+    	combinazioni.clear();
     	for(ProdottoCorredino pq: model.getMaxIncome().getP())
     	this.table.getItems().add(pq);
-    	this.product.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,String>("prod"));
+    	this.product.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,String>("name"));
     	this.qnt.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Integer>("quantita"));
     	this.price.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Double>("costo"));
     	this.sellerPrice.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Double>("sellerIncome"));
     	
-    	
+    	txtResult.appendText("Con questa combinazione guadagni "+model.getMaxIncome().getIncomeTot());
     }
 
     @FXML
     void CalcolaMin(ActionEvent event) {
     	txtResult.clear();
     	table.getItems().clear();
+    	combinazioni.clear();
     	for(ProdottoCorredino pq: model.getBest().getP()) {
     	this.table.getItems().add(pq);
     	this.product.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,String>("name"));
@@ -107,13 +118,19 @@ public class CorredinoController {
     	this.price.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Double>("costo"));
     	this.sellerPrice.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Double>("sellerIncome"));
     	}
+    	
+    	txtResult.appendText("Con quest combinazione spendi solo "+model.getBest().getTot());
     }
     
 
     @FXML
     void clientInit(ActionEvent event) throws CloneNotSupportedException {
+    	btnMaxIncome.setDisable(true);
+		btnMaxItem.setDisable(true);
+		btnTuttiv2.setDisable(true);
     	this.sellerPrice.setVisible(false);
     	this.table.setVisible(true);
+    	combinazioni.clear();
     	table.getItems().clear();
     	if(txtBdg.getText().isEmpty()) {
     		txtResult.appendText("Inserisci un budget\n");
@@ -143,8 +160,12 @@ public class CorredinoController {
 
     @FXML
     void sellerInit(ActionEvent event) throws CloneNotSupportedException {
+    	buttonMin.setDisable(true);
+		btnMaxC.setDisable(true);
+		btnTutti.setDisable(true);
     	this.sellerPrice.setVisible(true);
     	this.table.setVisible(true);
+    	combinazioni.clear();
     	table.getItems().clear();
     	if(txtBdg.getText().isEmpty()) {
     		txtResult.appendText("Inserisci un budget\n");
@@ -173,6 +194,17 @@ public class CorredinoController {
     void MostraTutti(ActionEvent event)  {
     	table.getItems().clear();
     	txtResult.clear();
+    	combinazioni.clear();
+    	if(model.getAll().isEmpty()) {
+    		txtResult.appendText("Non ci sono combinazioni con il budget da te impostato.");
+    		return;
+    	}
+    	if(model.getAll().size()==1) {
+    		txtResult.appendText("C'è solo una combinazione con il budget da te impostato.");
+    		
+    	} else {
+    		txtResult.appendText("Ci sono "+model.getAll().size()+" combinazioni disponibili.");
+    	}
     	
     	for(CorredinoSeller cs: model.getAll()) {
     		for(ProdottoCorredino pq: cs.getP()) {
@@ -198,6 +230,7 @@ public class CorredinoController {
     void MostraTuttiv2(ActionEvent event) {
     	txtResult.clear();
     	table.getItems().clear();
+    	combinazioni.clear();
     	for(CorredinoSeller cs: model.getAllSeller()) {
     		for(ProdottoCorredino pq: cs.getP()) {
     			this.table.getItems().addAll(pq);
@@ -206,13 +239,24 @@ public class CorredinoController {
 		    	this.price.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Double>("costo"));
 		    	this.sellerPrice.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Double>("sellerIncome"));
     		}
-    		this.table.getItems().addAll(new ProdottoCorredino(cs.getTot(), cs.getIncomeTot()));
-    		this.product.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,String>("name"));
+    		this.table.getItems().addAll(new ProdottoCorredino(cs.getTot(), (Double)cs.getIncomeTot()));
+    		//this.product.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,String>("name"));
         	
-    		this.price.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Double>("costo"));
+    		//this.price.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Double>("costo"));
         	
     		this.table.getItems().add(null);
     		this.table.getItems().add(null);
+    		
+    	}
+    	if(model.getAllSeller().isEmpty()) {
+    		txtResult.appendText("Non ci sono combinazioni con il budget da te impostato.");
+    		return;
+    	}
+    	if(model.getAllSeller().size()==1) {
+    		txtResult.appendText("C'è solo una combinazione con il budget da te impostato.");
+    		
+    	} else {
+    		txtResult.appendText("Ci sono "+model.getAll().size()+" combinazioni disponibili.");
     	}
     }
 
@@ -222,7 +266,14 @@ public class CorredinoController {
     void calcolaMaxItem(ActionEvent event) {
     	txtResult.clear();
     	table.getItems().clear();
-    	txtResult.appendText(model.getMaxItem());
+    	combinazioni.clear();
+    	for(ProdottoCorredino pq: model.getMaxItem().getP())
+    	this.table.getItems().add(pq);
+    	this.product.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,String>("name"));
+    	this.qnt.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Integer>("quantita"));
+    	this.price.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Double>("costo"));
+    	this.sellerPrice.setCellValueFactory(new PropertyValueFactory<ProdottoCorredino,Double>("sellerIncome"));
+    	txtResult.appendText("Con "+model.maxItN()+" prodotti venduti.");
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete

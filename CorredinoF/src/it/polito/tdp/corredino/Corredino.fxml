@@ -16,7 +16,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" style="-fx-background-color: 'yellow';" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polito.tdp.corredino.CorredinoController">
    <top>
-      <Label contentDisplay="CENTER" prefHeight="29.0" prefWidth="226.0" text="LET'S FIND THE PERFECT LAYETTE" BorderPane.alignment="CENTER">
+      <Label contentDisplay="CENTER" prefHeight="29.0" prefWidth="283.0" text="ALLA RICERCA DEL CORREDINO PERFETTO" BorderPane.alignment="CENTER">
          <font>
             <Font name="System Bold" size="14.0" />
          </font></Label>
@@ -26,7 +26,7 @@
          <children>
             <HBox alignment="CENTER" prefHeight="47.0" prefWidth="400.0">
                <children>
-                  <Label graphicTextGap="20.0" text="What's your budget">
+                  <Label graphicTextGap="20.0" text="Indica il tuo Budget">
                      <HBox.margin>
                         <Insets top="5.0" />
                      </HBox.margin>
@@ -42,7 +42,7 @@
                         <InnerShadow choke="0.5" color="#60a421" />
                      </effect>
                   </TextField>
-                  <ComboBox fx:id="season" prefWidth="150.0" promptText="Season" style="-fx-background-color: white;">
+                  <ComboBox fx:id="season" prefWidth="150.0" promptText="Stagione" style="-fx-background-color: white;">
                      <HBox.margin>
                         <Insets left="30.0" top="5.0" />
                      </HBox.margin>
@@ -60,7 +60,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="46.0" prefWidth="400.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#clientInit" prefHeight="30.0" prefWidth="220.0" text="Client side">
+                  <Button mnemonicParsing="false" onAction="#clientInit" prefHeight="30.0" prefWidth="220.0" text="Sono un cliente">
                      <HBox.margin>
                         <Insets top="10.0" />
                      </HBox.margin>
@@ -74,7 +74,7 @@
                         <InnerShadow choke="0.5" color="#60a421" />
                      </effect>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#sellerInit" prefHeight="30.0" prefWidth="220.0" text="Seller side">
+                  <Button mnemonicParsing="false" onAction="#sellerInit" prefHeight="30.0" prefWidth="220.0" text="Sono un commerciante">
                      <HBox.margin>
                         <Insets left="30.0" top="10.0" />
                      </HBox.margin>
@@ -90,11 +90,11 @@
                   </Button>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="42.0" prefWidth="640.0">
+            <HBox alignment="CENTER" prefHeight="36.0" prefWidth="640.0">
                <children>
-                  <Button fx:id="buttonMin" mnemonicParsing="false" onAction="#CalcolaMin" prefHeight="25.0" prefWidth="95.0" style="-fx-background-color: white;" text="Min expense">
+                  <Button fx:id="buttonMin" mnemonicParsing="false" onAction="#CalcolaMin" prefHeight="25.0" prefWidth="95.0" style="-fx-background-color: white;" text="Min spesa">
                      <HBox.margin>
-                        <Insets top="15.0" />
+                        <Insets top="10.0" />
                      </HBox.margin>
                      <cursor>
                         <Cursor fx:constant="OPEN_HAND" />
@@ -103,9 +103,9 @@
                         <InnerShadow choke="0.5" color="#60a421" />
                      </effect>
                   </Button>
-                  <Button fx:id="btnMaxC" mnemonicParsing="false" onAction="#CalcolaMaxC" style="-fx-background-color: white;" text="Max completeness">
+                  <Button fx:id="btnMaxC" mnemonicParsing="false" onAction="#CalcolaMaxC" style="-fx-background-color: white;" text="Max completezza">
                      <HBox.margin>
-                        <Insets left="25.0" top="15.0" />
+                        <Insets left="25.0" top="10.0" />
                      </HBox.margin>
                      <cursor>
                         <Cursor fx:constant="OPEN_HAND" />
@@ -114,9 +114,9 @@
                         <InnerShadow choke="0.5" color="#60a421" />
                      </effect>
                   </Button>
-                  <Button fx:id="btnTutti" mnemonicParsing="false" onAction="#MostraTutti" style="-fx-background-color: white;" text="Show all">
+                  <Button fx:id="btnTutti" mnemonicParsing="false" onAction="#MostraTutti" style="-fx-background-color: white;" text="Mostra tutti">
                      <HBox.margin>
-                        <Insets left="25.0" top="15.0" />
+                        <Insets left="25.0" top="10.0" />
                      </HBox.margin>
                      <cursor>
                         <Cursor fx:constant="OPEN_HAND" />
@@ -129,7 +129,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="41.0" prefWidth="640.0">
                <children>
-                  <Button fx:id="btnMaxIncome" mnemonicParsing="false" onAction="#CalcolaMaxIncome" prefHeight="25.0" prefWidth="94.0" style="-fx-background-color: white;" text="Max income">
+                  <Button fx:id="btnMaxIncome" mnemonicParsing="false" onAction="#CalcolaMaxIncome" prefHeight="25.0" prefWidth="94.0" style="-fx-background-color: white;" text="Max ricavo">
                      <HBox.margin>
                         <Insets top="7.0" />
                      </HBox.margin>
@@ -140,7 +140,7 @@
                         <InnerShadow choke="0.5" color="#60a421" />
                      </effect>
                   </Button>
-                  <Button fx:id="btnMaxItem" mnemonicParsing="false" onAction="#calcolaMaxItem" style="-fx-background-color: white;" text="Max item sold">
+                  <Button fx:id="btnMaxItem" mnemonicParsing="false" onAction="#calcolaMaxItem" style="-fx-background-color: white;" text="Max prodotti venduti">
                      <HBox.margin>
                         <Insets left="38.0" top="7.0" />
                      </HBox.margin>
@@ -151,7 +151,7 @@
                         <InnerShadow choke="0.5" color="#60a421" />
                      </effect>
                   </Button>
-                  <Button fx:id="btnTuttiv2" mnemonicParsing="false" onAction="#MostraTuttiv2" style="-fx-background-color: white;" text="Show all">
+                  <Button fx:id="btnTuttiv2" mnemonicParsing="false" onAction="#MostraTuttiv2" style="-fx-background-color: white;" text="Mostra tutti">
                      <HBox.margin>
                         <Insets left="38.0" top="7.0" />
                      </HBox.margin>
@@ -171,10 +171,10 @@
             </TextField>
             <TableView fx:id="table" prefHeight="231.0" prefWidth="600.0">
               <columns>
-                <TableColumn fx:id="product" prefWidth="75.0" text="Product" />
-                <TableColumn fx:id="qnt" prefWidth="75.0" text="Quantity" />
-                  <TableColumn fx:id="price" prefWidth="75.0" text="Price (CAD)" />
-                  <TableColumn fx:id="sellerPrice" prefWidth="75.0" text="Seller Price" />
+                <TableColumn fx:id="product" prefWidth="75.0" text="Prodotto" />
+                <TableColumn fx:id="qnt" prefWidth="75.0" text="Quantità" />
+                  <TableColumn fx:id="price" prefWidth="75.0" text="Prezzo (CAD)" />
+                  <TableColumn fx:id="sellerPrice" prefWidth="75.0" text="Costo venditore" />
               </columns>
                <VBox.margin>
                   <Insets left="20.0" right="20.0" top="10.0" />

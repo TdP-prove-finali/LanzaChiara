@@ -122,7 +122,7 @@ public class CorredinoSeller implements Comparable<CorredinoSeller>{
 
 
 
-	public void setTot(double tot) {
+	public void setTot(Double tot) {
 		this.tot =tot;
 	}
 
