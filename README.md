@@ -16,4 +16,7 @@ Importare sul proprio DB  il database dell’applicazione, presente all’intern
 
 All' interno della classe DBConnect immettere la propria password di accesso al database
 
-Aprire il progetto con il proprio editor e lanciare la classe Main nella directory principale del codice sorgente
+Aprire il progetto con il proprio editor e lanciare la classe Main nella directory principale del codice sorgente.
+
+
+Link al video di presentazione youtube https://youtu.be/PrjANCcYfCM
