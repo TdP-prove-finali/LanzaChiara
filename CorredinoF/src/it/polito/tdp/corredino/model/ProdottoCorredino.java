@@ -40,16 +40,19 @@ public class ProdottoCorredino {
 	
 	
 	//mi serve solo per stampare una riga con il totale del corredino
-	public ProdottoCorredino(Double tot) {
-		this.name="Costo totale:";
+	public ProdottoCorredino(int totProdotti,Double tot) {
+		this.name="Totale n prod e costo:";
+		//in quantita metto il totale dei prodotti acquistabili
+		this.quantita=totProdotti;
+		//in costo il totale del corredino
 		this.costo=tot;
 	}
 	
-	//questo per stampare una riga con totale e quanto quadagna il venditore dopo ogin combinazione
-	public ProdottoCorredino(Double tot, Double incomeTot) {
-		this.name="NB Seller price= quanto quadagni";
+	//questo per stampare una riga con totale e quanto quadagna il venditore dopo ogni combinazione
+	public ProdottoCorredino(int totProdotti, Double tot, Double incomeTot) {
+		this.name="Totale";
 		this.costo=tot;
-		
+		this.quantita=totProdotti;
 		this.sellerIncome=incomeTot;
 	}
 

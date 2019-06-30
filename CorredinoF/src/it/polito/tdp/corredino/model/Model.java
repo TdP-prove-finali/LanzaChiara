@@ -13,8 +13,8 @@ public class Model {
 	
 	private ListinoDAO dao;
 	
-	private List<Product> allP;
-	private List<Categories> categories= new ArrayList<Categories>();
+	private List<Product> allP; //tutti i prodotti presenti nel database
+	private List<Categories> categories= new ArrayList<Categories>(); //tutte le categorie presenti nel db
 	//uso liste di interi perchè indicheranno la quantita del prodotto corrispondente nella lista all'indice in caso
 	private List<Integer> parziale;
 	//stessa cosa per le quantita delle categorie, la corrispondenza è diretta con la categoria della lista categories avente lo stesso indice
@@ -23,22 +23,28 @@ public class Model {
 	private List<Integer> best;
 	private double totBest;
 	private double min;
+	//lista di corredini
+	private List<CorredinoSeller> ris;
+	//corredino con massimo num di categorie
+	private CorredinoSeller maxItC= new CorredinoSeller();
+	//numero di categorie presenti
+	private int maxCat;
+	//num di prodotti per carredino
+	private int item=0;
+	//corredino con massimo num di prodotti 
+	private CorredinoSeller maxIt=new CorredinoSeller();
+	//num prodotti nel corredino che li massimizza 
+	private int maxItem=0;
 	
+	//tolleranza sara' quanto posssono variare le proporzioni, 
+	//aggiungo un set per dare modo di modificarlo esternamente 
 	private double tolleranza;
-	
+	//margine sara' quanto tollero che vari il budget inserito NB:possibile modificarlo
 	private double marg;
-	int flag=0;
-	int f=0;
+	private ComparatoreSeller compS=new ComparatoreSeller();
+	private ComparatoreCliente compC = new ComparatoreCliente();
 	
-	//margine sara' quanto tollero che vari il budget inserito
-	public void setMarg(double margine) {
-		this.marg = margine;
-	}
 
-	//tolleranza sara' quanto posssono variare le proporzioni, aggiungo un set per dare modo di modificarlo esternamente
-	public void setTolleranza(double intervallo) {
-		this.tolleranza = intervallo;
-	}
 
 	public Model() {
 		dao= new ListinoDAO();
@@ -53,7 +59,8 @@ public class Model {
 		
 	}
 	
-	public List<Integer> calcola(double budget, String season){
+	
+	public void calcola(double budget, String season){
 		categories=dao.getAllCat(season);
 		combinazioni=new ArrayList<>();
 		best=new ArrayList<>();
@@ -72,35 +79,16 @@ public class Model {
 		for(int i=0;i<allP.size();i++) {
 			parziale.add(0);
 		}
-
-		
 		this.prova(0, 0, tot, budget);
-		
-//		final int TEST_TOTAL = 33;
-//		int[] test = {2,0,0,2,0,4,0,0,0,2,0,4,0,0,2,0,4,0,0,4,0,0,2,0,4,0,2,0,6,0,0,6,0,6,0,8,0,0,0};
-//		parziale= Arrays.stream(test).boxed().collect(Collectors.toList());
-//		int[] test2 = {2,2,4,2,4,2,4,4,2,4,2,6,6,6,8};
-//		this.quantitaCat=  Arrays.stream(test2).boxed().collect(Collectors.toList());
-//		isCompleta(parziale);
-		
-		return best;
 	}
 	
+	
+	
 	public void prova(int indexP, int indexC, double tot, double budget) {
-		
-		//inizializzo indexCAtt perche se non lo setto esco con il return
-		int indexCAtt=-1;
-		//cerco quale categoria di prodotto sto testando, per inviarla come dato nella ricorsione (serve per il testing intermedio delle proporzioni)
-		//NB: indexC e del prodotto precedente e serve per il test
-		if(!(indexP>parziale.size()-1)) {
-			indexCAtt= categories.indexOf(allP.get(indexP).getCategory());
-		}
-
 
 		double margine= this.marg*budget;
 		if(indexP>parziale.size()-1) {
 			if(budget-tot<margine && this.isCompleta(parziale)) {
-				//E' NECESSARIO CREARE UNA NUOVA LISTA??
 				List<Integer> add= new ArrayList<Integer>(parziale); 
 				combinazioni.add(add);
 				if(tot<totBest) {
@@ -111,16 +99,27 @@ public class Model {
 			return;
 		}
 		
+		//inizializzo indexCAtt perche se non lo setto esco con il return
+		int indexCAtt=-1;
+		//cerco quale categoria di prodotto sto testando, per inviarla come dato nella ricorsione 
+		//(serve per il testing intermedio delle proporzioni)
+		//NB: indexC e del prodotto precedente e serve per il test
+		if(!(indexP>parziale.size()-1)) {
+			indexCAtt= categories.indexOf(allP.get(indexP).getCategory());
+		}
 		
-		//controllo ce lìindice della categoria sia diverso per poter fare un controllo delle categorie fin ora complete e bloccare in anticipo eventuali soluzioni inadatte
-				//indexCAtt deve essere >=1 perche per poter fare il confronto servono almeno due categorie(0,1) NB:sono in ordine
-				//anche se e' inutile passare la lista parziale perhè tanto è stata dichiarata globalmente, indexCAtt è necessario
-				if(indexCAtt!=indexC && indexCAtt>=1) {
-					if(!this.controllaProp(parziale, indexCAtt))
-						return;
-				}
+		//controllo ce lìindice della categoria sia diverso per poter fare un controllo delle categorie 
+		//fin ora complete e bloccare in anticipo eventuali soluzioni inadatte
+		//indexCAtt deve essere >=1 perche per poter fare il confronto servono almeno due categorie(0,1) 
+		//NB:sono in ordine anche se e' inutile passare la lista parziale perhè tanto è stata dichiarata 
+		//globalmente, indexCAtt è necessario
+		if(indexCAtt!=indexC && indexCAtt>=1) {
+			if(!this.controllaProp(parziale, indexCAtt))
+				return;
+		}
 
-		//capisco quanti prodotti posso aggiungere in base al massimo della categoria, ma tengo conto anche di quelli gia inseriti per quella categoria
+		//capisco quanti prodotti posso aggiungere in base al massimo della categoria, 
+		//ma tengo conto anche di quelli gia inseriti per quella categoria
 		int max=categories.get(indexCAtt).getMax()-this.quantitaCat.get(indexCAtt);
 		
 		//quanti ne posso aggiugere ancora senza sforare il budget?
@@ -134,11 +133,11 @@ public class Model {
 			return;
 		
 		
+		//vera e propria ricorsione
 		for(int q=0;q<max;q++) {
 
 			//aggiungo la quantita di prodotti alla lista di quantita dei prodotti
 			this.parziale.set(indexP, q);
-			//System.out.println(parziale.toString());
 			//aggiorno tot
 			tot += allP.get(indexP).getPrice()*q;
 			//aggiorno la quantita della categoria in corso
@@ -149,53 +148,18 @@ public class Model {
 			if(indexP<allP.size())
 			this.prova(indexP+1, indexCAtt, tot, budget);
 			
-			//System.out.println(parziale.toString());
-			
 			//ritorno alle condizioni precedenti
 			
 			this.quantitaCat.set(indexCAtt, att);
-			tot -= allP.get(indexP).getPrice()*q;
-			
-			
+			tot -= allP.get(indexP).getPrice()*q;	
 		}
 		
 	}
-
-
-	private boolean controllaProp(List<Integer> parziale, int indexCAtt) {
-		//il controllo lo faccio tra la categoria su indexCatt e la precedente, se il suo minimo è diverso da 0, altrimenti con una delle precedenti 
-		
-		for(int i =0;i<indexCAtt;i++) {
-			for(int j=0;j<indexCAtt;j++) {
-				if(i!=j) {
-				double qi_Min=categories.get(i).getMin();
-				double qj_Min=categories.get(j).getMin();
-				double qi_Att=quantitaCat.get(i);
-				double qj_Att=quantitaCat.get(j);
-				double prop_i=categories.get(i).getProporzione();
-				double prop_j=categories.get(j).getProporzione();
-				if(qi_Min!=0 && qj_Min!=0)
-					if(qi_Att>0 && qj_Att>0)
-						if(!(((double)(qi_Att/qj_Att))<(1+this.tolleranza)*(prop_i/prop_j) && ((double)(qi_Att/qj_Att))>(1-this.tolleranza)*(prop_i/prop_j)))
-							return false;
-				if((qi_Min==0 || categories.get(i).getMax()==1)  && qj_Min!=0 && qj_Att!=0)
-					if(qi_Att!=0 && !(((double)(qi_Att/qj_Att))<(1+this.tolleranza)*(prop_i/prop_j) && ((double)(qi_Att/qj_Att))>(1-this.tolleranza)*(prop_i/prop_j)))
-						return false;
-				if((qj_Min==0 || categories.get(j).getMax()==1)  && qi_Min!=0 && qi_Att!=0)
-					if(qj_Att!=0 && !(((double)(qi_Att/qj_Att))<(1+this.tolleranza)*(prop_i/prop_j) && ((double)(qi_Att/qj_Att))>(1-this.tolleranza)*(prop_i/prop_j)))
-						return false;
-			}}
-		}
-		return true;
-	}
-
+	
+	
 	private boolean isCompleta(List<Integer> parziale) {
 		
 		int i=0;
-		//vorrei prendere la prima categoria, in elenco per fare i rapporti (uso sempre la stessa al numeratore per fare solo nCategorie-1 controlli)
-		//ma non so se quella categoria ha come minimo 0 (o meglio lo so per certo, ma pensando in astratto non lo posso sapere)
-
-		//mi tocca iterare sulle categorie  per trovarne una con minimo maggiore di 0
 		//catNum sara l'indice della categoria numeratore delle proporzioni
 		int catNum=-1;
 		//valNum invece il valore proporzione della categoria 
@@ -204,14 +168,12 @@ public class Model {
 			if(c.getMin()>0 && quantitaCat.get(categories.indexOf(c))!=0) {
 				catNum=categories.indexOf(c);
 				valNum=c.getProporzione();
-				//il break nel for va bene??
 				break;
 			}
 		}
 
 		if(catNum==-1 || valNum==-1)
 			return false;
-
 		
 		for(int index=0; index<quantitaCat.size(); index++) {
 			if(index!=catNum) {
@@ -232,33 +194,71 @@ public class Model {
 			}
 		}
 		
-		
 		if(i==categories.size() - 1) {
-			//System.out.println("Buono");
 			return true;
 		}
 
 		return false;
 	}
 
-	private List<CorredinoSeller> ris;
-	private CorredinoSeller maxItC= new CorredinoSeller();
+
+
+	private boolean controllaProp(List<Integer> parziale, int indexCAtt) {
+		//il controllo lo faccio tra la categoria su indexCatt e la precedente, 
+		//se il suo minimo è diverso da 0, altrimenti con una delle precedenti 
+		
+		for(int i =0;i<indexCAtt;i++) {
+			for(int j=0;j<indexCAtt;j++) {
+				if(i!=j) {
+				//per facilitare debug ho salvato in delle variabli
+				double qi_Min=categories.get(i).getMin();
+				double qj_Min=categories.get(j).getMin();
+				double qi_Att=quantitaCat.get(i);
+				double qj_Att=quantitaCat.get(j);
+				double prop_i=categories.get(i).getProporzione();
+				double prop_j=categories.get(j).getProporzione();
+				if(qi_Min!=0 && qj_Min!=0)
+					if(qi_Att>0 && qj_Att>0)
+						if(!(((double)(qi_Att/qj_Att))<(1+this.tolleranza)*(prop_i/prop_j) &&
+								((double)(qi_Att/qj_Att))>(1-this.tolleranza)*(prop_i/prop_j)))
+							return false;
+				if((qi_Min==0 || categories.get(i).getMax()==1)  && qj_Min!=0 && qj_Att!=0)
+					if(qi_Att!=0 && !(((double)(qi_Att/qj_Att))<(1+this.tolleranza)*(prop_i/prop_j) && 
+							((double)(qi_Att/qj_Att))>(1-this.tolleranza)*(prop_i/prop_j)))
+						return false;
+				if((qj_Min==0 || categories.get(j).getMax()==1)  && qi_Min!=0 && qi_Att!=0)
+					if(qj_Att!=0 && !(((double)(qi_Att/qj_Att))<(1+this.tolleranza)*(prop_i/prop_j) && 
+							((double)(qi_Att/qj_Att))>(1-this.tolleranza)*(prop_i/prop_j)))
+						return false;
+			}}
+		}
+		return true;
+	}
+
 	
-	public List<CorredinoSeller> getAll() {
+	public void getAll() {
 		
 		CorredinoSeller b = new CorredinoSeller();
-		maxItem=0;
+		maxCat=0;
+		double tot=0;
+		int att=0;
+		double income=0;
 		ris= new LinkedList<>();
 		int indexCatVecchia=0;
 		for(List<Integer> li : combinazioni) {
-			double tot=0;
-			int att=0;
+			//risfrutto la variabile che utilizzo in modalità seller anche se non hanno lo stesso scopo 
+			item=0;
+			tot=0;
+			att=0;
+			income=0;
 			b = new CorredinoSeller();
 			for(int i=0;i <li.size();i++) {
 				if(li.get(i)!=0) {
-					ProdottoCorredino temp= new ProdottoCorredino(allP.get(i).getName(),li.get(i),(double)allP.get(i).getPrice(),0.0);
+					ProdottoCorredino temp= new ProdottoCorredino(allP.get(i).getName(),li.get(i),(double)allP.get(i).getPrice(),(double)allP.get(i).getSellerPrice());
 					b.addP(temp);
-					tot += allP.get(i).getPrice()*li.get(i);
+					item +=li.get(i);
+					income += (double)(allP.get(i).getPrice()-allP.get(i).getSellerPrice())*li.get(i);
+					tot += temp.getQuantita()*temp.getCosto();
 					if(i!=0)
 					//contatore di categorie nel corredino
 					if(!allP.get(i).getCategory().equals(allP.get(indexCatVecchia).getCategory())) {
@@ -266,26 +266,34 @@ public class Model {
 						indexCatVecchia=i;}
 				}
 			}
-			b.setTot((double)tot);
+			//operazione necessaria, non capisco perchè mi usciva un valore con non arrotondato
+			b.setTot((Math.round( tot * Math.pow( 10, 2 ) )/Math.pow( 10, 2 )));
+			b.setTotProdotti(item);
+			b.setIncomeTot((Math.round( income * Math.pow( 10, 2 ) )/Math.pow( 10, 2 )));
 			ris.add(b);
-			if (att>maxItem) {
-				maxItem=att;
+			if (att>maxCat) {
+				maxCat=att;
 				maxItC = new CorredinoSeller(b.getP(),(double)b.getTot());}
+		
+			if(item>maxItem) {
+				maxItem=item;
+				maxIt= new CorredinoSeller(b.getP(),(double)b.getTot(),b.getIncomeTot());
+			}
+		
 		}
 		
-		Collections.sort(ris);
-		return ris;
+		
 	}
-	
 	
 	public CorredinoSeller  getMaxC() {
 		return maxItC;
 	}
 	public int categorie() {
-		return this.maxItem;
+		return this.maxCat;
 	}
 	
 	public List<CorredinoSeller> returnAll(){
+		Collections.sort(ris, compC);
 		return ris;
 	}
 	
@@ -298,54 +306,21 @@ public class Model {
 				b.addP(temp);
 				tot += allP.get(i).getPrice()*best.get(i);
 		}}
-		b.setTot(tot);
+		b.setTot((Math.round( tot * Math.pow( 10, 2 ) )/Math.pow( 10, 2 )));
 		return b;
 	}
 	
-
-	List<CorredinoSeller> res;
-	int maxItem=0;
-	CorredinoSeller maxIt=new CorredinoSeller();
 	
-	public List<CorredinoSeller> getAllSeller(){
-		
-		CorredinoSeller cs=new CorredinoSeller();
-		int att=0;
-		res= new ArrayList<>();
-		for(List<Integer> li : combinazioni) {
-			double tot=0;
-			double income=0;
-			att=0;
-			cs=new CorredinoSeller();
-			for(int i=0;i <li.size();i++) {
-				if(li.get(i)!=0) {	
-				ProdottoCorredino temp= new ProdottoCorredino(allP.get(i).getName(),li.get(i),(double)allP.get(i).getPrice(),(double)allP.get(i).getSellerPrice());
-				cs.addP(temp);
-				tot += allP.get(i).getPrice()*li.get(i);
-				income += (allP.get(i).getPrice()-allP.get(i).getSellerPrice())*li.get(i);
-				att +=li.get(i);
-			}}
-			cs.setTot(tot);
-			cs.setIncomeTot(income);
-			res.add(cs);
-			if(att>maxItem) {
-				maxItem=att;
-				maxIt= new CorredinoSeller(cs.getP(),(double)cs.getTot(),cs.getIncomeTot());
-			}
-		
-		}
-		
-		Collections.sort(res);
-		return res;
-		
-	}
+	
 	
 	public List<CorredinoSeller> returnAllSeller() {
-		return res;
+		Collections.sort(ris,compS);
+		return ris;
 	}
 	
 	public CorredinoSeller getMaxIncome() {
-		return res.get(res.size()-1);
+		Collections.sort(ris,compS);
+		return ris.get(0);
 	}
 	
 	public CorredinoSeller getMaxItem() {
@@ -357,6 +332,14 @@ public class Model {
 		return maxItem;
 	}
 
+	
+	public void setMarg(double margine) {
+		this.marg = margine;
+	}
+
+	public void setTolleranza(double intervallo) {
+		this.tolleranza = intervallo;
+	}
 
 
 }

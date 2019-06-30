@@ -56,11 +56,22 @@
                         <InnerShadow choke="0.5" color="#60a421" />
                      </effect>
                   </ComboBox>
+                  <Button fx:id="calcola" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#trovaCorredini" style="-fx-background-color: white;" text="Calcola">
+                     <HBox.margin>
+                        <Insets left="30.0" top="5.0" />
+                     </HBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="OPEN_HAND" />
+                     </cursor>
+                     <effect>
+                        <InnerShadow choke="0.5" color="#60a421" />
+                     </effect>
+                  </Button>
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="46.0" prefWidth="400.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#clientInit" prefHeight="30.0" prefWidth="220.0" text="Sono un cliente">
+                  <Button fx:id="client" mnemonicParsing="false" onAction="#clientInit" prefHeight="30.0" prefWidth="220.0" text="Sono un cliente">
                      <HBox.margin>
                         <Insets top="10.0" />
                      </HBox.margin>
@@ -74,7 +85,7 @@
                         <InnerShadow choke="0.5" color="#60a421" />
                      </effect>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#sellerInit" prefHeight="30.0" prefWidth="220.0" text="Sono un commerciante">
+                  <Button fx:id="seller" mnemonicParsing="false" onAction="#sellerInit" prefHeight="30.0" prefWidth="220.0" text="Sono un commerciante">
                      <HBox.margin>
                         <Insets left="30.0" top="10.0" />
                      </HBox.margin>
@@ -187,10 +198,6 @@
       </VBox>
    </center>
    <bottom>
-      <HBox alignment="CENTER" prefHeight="47.0" prefWidth="640.0" BorderPane.alignment="BOTTOM_CENTER">
-         <children>
-            <TextField fx:id="combinazioni" />
-         </children>
-      </HBox>
+      <HBox alignment="CENTER" prefHeight="47.0" prefWidth="640.0" BorderPane.alignment="BOTTOM_CENTER" />
    </bottom>
 </BorderPane>

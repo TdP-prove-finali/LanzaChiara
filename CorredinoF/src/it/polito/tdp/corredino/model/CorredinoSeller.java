@@ -6,15 +6,9 @@ import java.util.List;
 public class CorredinoSeller implements Comparable<CorredinoSeller>{
 	
 	private List<ProdottoCorredino> p;
+	private int totProdotti;
 	private double tot;
 	private double incomeTot;
-
-	
-	
-
-
-
-
 
 	public CorredinoSeller(List<ProdottoCorredino> p, double tot, double incomeTot) {
 		super();
@@ -26,18 +20,9 @@ public class CorredinoSeller implements Comparable<CorredinoSeller>{
 
 
 
-
-
-
-
 	public double getIncomeTot() {
 		return incomeTot;
 	}
-
-
-
-
-
 
 
 
@@ -47,21 +32,10 @@ public class CorredinoSeller implements Comparable<CorredinoSeller>{
 
 
 
-
-
-
-
-
 	public CorredinoSeller(double incomeTot) {
 		super();
 		this.incomeTot = incomeTot;
 	}
-
-
-
-
-
-
 
 
 	public CorredinoSeller(List<ProdottoCorredino> p, double tot) {
@@ -69,11 +43,6 @@ public class CorredinoSeller implements Comparable<CorredinoSeller>{
 		this.p = p;
 		this.tot = tot;
 	}
-
-
-
-
-
 
 
 
@@ -85,19 +54,9 @@ public class CorredinoSeller implements Comparable<CorredinoSeller>{
 
 
 
-
-
-
-
 	public List<ProdottoCorredino> getP() {
 		return p;
 	}
-
-
-
-
-
-
 
 
 	public void addP(ProdottoCorredino p) {
@@ -105,21 +64,9 @@ public class CorredinoSeller implements Comparable<CorredinoSeller>{
 	}
 
 
-
-
-
-
-
-
 	public double getTot() {
 		return tot;
 	}
-
-
-
-
-
-
 
 
 	public void setTot(Double tot) {
@@ -127,8 +74,16 @@ public class CorredinoSeller implements Comparable<CorredinoSeller>{
 	}
 
 
+	public int getTotProdotti() {
+		return totProdotti;
+	}
 
 
+
+
+	public void setTotProdotti(int totProdotti) {
+		this.totProdotti = totProdotti;
+	}
 
 
 
@@ -146,11 +101,6 @@ public class CorredinoSeller implements Comparable<CorredinoSeller>{
 		}
 		return (int) ((tot1*100)-(tot2*100));
 	}
-
-
-
-
-	
 	
 	
 
